@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Unq0de — Fullstack &amp; App Developer</title>
+<meta name="description" content="Fullstack and app developer focused on React Native, Flutter, Python and APIs.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%230D0F12'/%3E%3Ctext x='32' y='42' font-family='monospace' font-size='26' font-weight='700' fill='%23E8A33D' text-anchor='middle'%3E%3E_%3C/text%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700;800&amp;family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0D0F12;
+    --bg-alt: #15181D;
+    --bg-raised: #1B1F26;
+    --border: #262B33;
+    --border-soft: #1E222A;
+    --text: #E7E9EC;
+    --text-muted: #99A1AE;
+    --accent: #E8A33D;
+    --accent-dark: #0D0F12;
+    --accent-blue: #5FA8D3;
+    --accent-rose: #D97AA0;
+    --mono: 'JetBrains Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --sans: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    --radius: 10px;
+    --maxw: 1080px;
+  }
+
+  *,*::before,*::after{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *,*::before,*::after{ animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; }
+  }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* ambient dot-grid texture */
+  body::before{
+    content:"";
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, rgba(231,233,236,0.05) 1px, transparent 1px);
+    background-size: 26px 26px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  a{ color: inherit; }
+  h1,h2,h3{ font-family: var(--mono); font-weight: 700; margin: 0; letter-spacing: -0.01em; }
+  p{ margin: 0; }
+  ::selection{ background: var(--accent); color: var(--accent-dark); }
+
+  :focus-visible{
+    outline: 2px solid var(--accent);
+    outline-offset: 3px;
+    border-radius: 4px;
+  }
+
+  .wrap{ max-width: var(--maxw); margin: 0 auto; padding: 0 24px; position: relative; z-index: 1; }
+  .eyebrow{
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent-blue);
+    margin: 0 0 10px 0;
+  }
+  .tag{
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text-muted);
+    background: var(--bg-raised);
+    border: 1px solid var(--border);
+    padding: 4px 10px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: rgba(13,15,18,0.82);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border-soft);
+  }
+  .nav-inner{
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 16px 24px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .logo{
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 15px;
+    color: var(--text);
+    text-decoration: none;
+  }
+  .logo span{ color: var(--accent); }
+  .nav-links{
+    display: flex;
+    gap: 28px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-family: var(--mono);
+    font-size: 14px;
+  }
+  .nav-links a{
+    text-decoration: none;
+    color: var(--text-muted);
+    transition: color .15s ease;
+  }
+  .nav-links a:hover{ color: var(--text); }
+  .nav-cta{
+    font-family: var(--mono);
+    font-size: 13.5px;
+    text-decoration: none;
+    color: var(--accent-dark);
+    background: var(--accent);
+    padding: 8px 14px;
+    border-radius: 6px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  @media (max-width: 680px){
+    .nav-links{ display:none; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    padding: 76px 0 60px;
+  }
+  .window{
+    background: var(--bg-alt);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: 0 30px 60px -30px rgba(0,0,0,0.6);
+    max-width: 640px;
+  }
+  .window-bar{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    padding: 11px 14px;
+    background: var(--bg-raised);
+    border-bottom: 1px solid var(--border);
+  }
+  .dot{ width: 10px; height: 10px; border-radius: 50%; opacity: 0.85; }
+  .dot-r{ background: #FF5F57; }
+  .dot-y{ background: #FEBC2E; }
+  .dot-g{ background: #28C840; }
+  .window-title{
+    margin-left: 8px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text-muted);
+  }
+  .window-body{
+    padding: 20px 20px 22px;
+    font-family: var(--mono);
+    font-size: 14px;
+    min-height: 168px;
+  }
+  .terminal-line{ color: var(--text); }
+  .prompt{ color: var(--accent-blue); }
+  #typed-cmd{ color: var(--text); }
+  .cursor{
+    display: inline-block;
+    color: var(--accent);
+    animation: blink 1s steps(1) infinite;
+  }
+  @keyframes blink{ 50%{ opacity: 0; } }
+  .json-output{
+    margin: 12px 0 0 0;
+    color: var(--text-muted);
+    white-space: pre-wrap;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  .json-output .key{ color: var(--accent-blue); }
+  .json-output .str{ color: var(--accent); }
+  .json-output .punc{ color: var(--text-muted); }
+  .json-output .arr{ color: var(--accent-rose); }
+
+  .hero-thesis{
+    max-width: 720px;
+    margin-top: 40px;
+    opacity: 0;
+    transform: translateY(14px);
+    transition: opacity .6s ease, transform .6s ease;
+  }
+  .hero-thesis.revealed{ opacity: 1; transform: translateY(0); }
+  .hero-thesis h1{
+    font-size: clamp(28px, 4.6vw, 44px);
+    line-height: 1.18;
+  }
+  .hero-thesis h1 .accent{ color: var(--accent); }
+  .hero-sub{
+    font-size: 17px;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin-top: 16px;
+  }
+  .hero-sub strong{ color: var(--text); font-weight: 600; }
+
+  .status-pill{
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text-muted);
+    margin-top: 18px;
+    border: 1px solid var(--border);
+    padding: 6px 12px;
+    border-radius: 100px;
+  }
+  .status-dot{
+    width: 7px; height: 7px; border-radius: 50%;
+    background: #28C840;
+    box-shadow: 0 0 0 3px rgba(40,200,64,0.15);
+  }
+
+  .hero-cta{ display:flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
+  .btn{
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: 14.5px;
+    padding: 12px 20px;
+    border-radius: 7px;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .btn-primary{ background: var(--accent); color: var(--accent-dark); }
+  .btn-primary:hover{ transform: translateY(-1px); }
+  .btn-ghost{ border: 1px solid var(--border); color: var(--text); }
+  .btn-ghost:hover{ border-color: var(--accent-blue); color: var(--accent-blue); }
+
+  /* ---------- SECTION GENERIC ---------- */
+  .section{ padding: 88px 0; border-top: 1px solid var(--border-soft); }
+  .section h2{ font-size: clamp(22px, 3vw, 30px); margin-bottom: 36px; }
+  .reveal{
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity .55s ease, transform .55s ease;
+  }
+  .reveal.in-view{ opacity: 1; transform: translateY(0); }
+
+  /* ---------- STACK ---------- */
+  .tree{
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 18px;
+  }
+  @media (max-width: 640px){ .tree{ grid-template-columns: 1fr; } }
+  .tree-group{
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px;
+    background: var(--bg-alt);
+  }
+  .tree-folder{
+    font-family: var(--mono);
+    font-size: 14px;
+    color: var(--accent-blue);
+    margin: 0 0 14px 0;
+  }
+  .tree-folder .slash{ color: var(--text-muted); }
+  .tree-items{ display:flex; flex-wrap: wrap; gap: 8px; }
+
+  /* ---------- PROJECTS ---------- */
+  .commit-list{ display:flex; flex-direction: column; gap: 16px; }
+  .commit-card{
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 22px 24px;
+    background: var(--bg-alt);
+    transition: border-color .15s ease, transform .15s ease;
+  }
+  .commit-card:hover{ border-color: var(--accent-blue); transform: translateY(-2px); }
+  .commit-meta{
+    display:flex; align-items:center; gap: 10px;
+    font-family: var(--mono); font-size: 12.5px; color: var(--text-muted);
+    margin-bottom: 10px;
+  }
+  .commit-hash{ color: var(--accent-rose); }
+  .commit-card h3{
+    font-family: var(--sans);
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 8px;
+  }
+  .commit-card p{ color: var(--text-muted); font-size: 15px; }
+  .commit-tags{ display:flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+  .commit-links{ display:flex; gap: 18px; margin-top: 16px; }
+  .commit-links a{
+    font-family: var(--mono);
+    font-size: 13.5px;
+    text-decoration: none;
+    color: var(--accent);
+  }
+  .commit-links a:hover{ color: var(--accent-blue); }
+
+  /* ---------- ABOUT / README ---------- */
+  .readme{
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    max-width: 760px;
+  }
+  .readme-tab{
+    font-family: var(--mono);
+    font-size: 12.5px;
+    color: var(--text-muted);
+    background: var(--bg-raised);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 16px;
+  }
+  .readme-body{ padding: 26px 26px 28px; background: var(--bg-alt); }
+  .readme-body p{ color: var(--text-muted); font-size: 15.5px; margin-bottom: 14px; }
+  .readme-body p:last-child{ margin-bottom: 0; }
+  .readme-body strong{ color: var(--text); }
+
+  /* ---------- CONTACT ---------- */
+  .contact-inner{ max-width: 620px; }
+  .contact-inner p{ color: var(--text-muted); font-size: 16px; margin-top: 14px; }
+  .contact-actions{ display:flex; gap: 14px; margin-top: 30px; flex-wrap: wrap; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    border-top: 1px solid var(--border-soft);
+    padding: 28px 0 40px;
+  }
+  .footer-inner{
+    display:flex; justify-content: space-between; align-items:center; flex-wrap: wrap; gap: 10px;
+    font-family: var(--mono); font-size: 12.5px; color: var(--text-muted);
+  }
+</style>
+</head>
+<body>
+
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#" class="logo">~/<span>unq0de</span></a>
+    <ul class="nav-links">
+      <li><a href="#stack">Stack</a></li>
+      <li><a href="#projects">Projects</a></li>
+      <li><a href="#about">About</a></li>
+    </ul>
+    <a href="#contact" class="nav-cta">Contact</a>
+  </div>
+</header>
+
+<main>
+  <!-- ================= HERO ================= -->
+  <section class="hero wrap">
+    <div class="window">
+      <div class="window-bar">
+        <span class="dot dot-r"></span><span class="dot dot-y"></span><span class="dot dot-g"></span>
+        <span class="window-title">me.sh</span>
+      </div>
+      <div class="window-body">
+        <p class="terminal-line"><span class="prompt">$</span> <span id="typed-cmd"></span><span class="cursor" id="cursor">▌</span></p>
+        <pre class="json-output" id="typed-json"></pre>
+      </div>
+    </div>
+
+    <div class="hero-thesis" id="hero-thesis">
+      <h1>Apps, APIs &amp; backends,<br><span class="accent">that simply work.</span></h1>
+      <p class="hero-sub">I'm <strong>Unq0de</strong> — a developer for React Native, Flutter, Python and everything in between. From the first idea to a production-ready API.</p>
+      <span class="status-pill"><span class="status-dot"></span>Open to new projects</span>
+      <div class="hero-cta">
+        <a href="#projects" class="btn btn-primary">View projects</a>
+        <a href="#contact" class="btn btn-ghost">Get in touch</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= STACK ================= -->
+  <section id="stack" class="section wrap">
+    <p class="eyebrow reveal">// stack</p>
+    <h2 class="reveal">What I work with</h2>
+    <div class="tree reveal">
+      <div class="tree-group">
+        <p class="tree-folder">mobile<span class="slash">/</span></p>
+        <div class="tree-items">
+          <span class="tag">React Native</span>
+          <span class="tag">Flutter</span>
+          <span class="tag">Dart</span>
+          <span class="tag">TypeScript</span>
+        </div>
+      </div>
+      <div class="tree-group">
+        <p class="tree-folder">frontend<span class="slash">/</span></p>
+        <div class="tree-items">
+          <span class="tag">React</span>
+          <span class="tag">TypeScript</span>
+          <span class="tag">Tailwind</span>
+          <span class="tag">Vite</span>
+        </div>
+      </div>
+      <div class="tree-group">
+        <p class="tree-folder">backend + apis<span class="slash">/</span></p>
+        <div class="tree-items">
+          <span class="tag">Python</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag">REST</span>
+          <span class="tag">PostgreSQL</span>
+        </div>
+      </div>
+      <div class="tree-group">
+        <p class="tree-folder">tooling<span class="slash">/</span></p>
+        <div class="tree-items">
+          <span class="tag">Docker</span>
+          <span class="tag">Git</span>
+          <span class="tag">CI/CD</span>
+          <span class="tag">Linux</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= PROJECTS ================= -->
+  <section id="projects" class="section wrap">
+    <p class="eyebrow reveal">// projects</p>
+    <h2 class="reveal">Selected work</h2>
+    <div class="commit-list">
+      <article class="commit-card reveal">
+        <div class="commit-meta"><span class="commit-hash">#a3f9c1d</span><span>2026</span></div>
+        <!-- TODO: add real project -->
+        <h3>Project Name — Cross-Platform App</h3>
+        <p>Short description: what problem does the app solve, for whom, and what was your role. Two or three sentences are enough.</p>
+        <div class="commit-tags">
+          <span class="tag">React Native</span>
+          <span class="tag">Node.js</span>
+        </div>
+        <div class="commit-links">
+          <a href="#">Code →</a>
+          <a href="#">Live →</a>
+        </div>
+      </article>
+
+      <article class="commit-card reveal">
+        <div class="commit-meta"><span class="commit-hash">#7e21bb4</span><span>2025</span></div>
+        <h3>Project Name — Flutter App</h3>
+        <p>Short description: what problem does the app solve, for whom, and what was your role.</p>
+        <div class="commit-tags">
+          <span class="tag">Flutter</span>
+          <span class="tag">Firebase</span>
+        </div>
+        <div class="commit-links">
+          <a href="#">Code →</a>
+          <a href="#">Live →</a>
+        </div>
+      </article>
+
+      <article class="commit-card reveal">
+        <div class="commit-meta"><span class="commit-hash">#12d4f80</span><span>2025</span></div>
+        <h3>Project Name — REST API &amp; Backend</h3>
+        <p>Short description: what system is behind it, what scaling / integration was required.</p>
+        <div class="commit-tags">
+          <span class="tag">Python</span>
+          <span class="tag">FastAPI</span>
+          <span class="tag">Docker</span>
+        </div>
+        <div class="commit-links">
+          <a href="#">Code →</a>
+          <a href="#">Docs →</a>
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <!-- ================= ABOUT ================= -->
+  <section id="about" class="section wrap">
+    <p class="eyebrow reveal">// about</p>
+    <h2 class="reveal">README.md</h2>
+    <div class="readme reveal">
+      <div class="readme-tab">README.md</div>
+      <div class="readme-body">
+        <p><strong>Who I am:</strong> I build apps, web applications, and the APIs that keep them running — from React Native and Flutter on the frontend to Python backends and custom interfaces.</p>
+        <p><strong>How I work:</strong> It matters to me that software feels intuitive and is built just as cleanly in the code as it is in the interface. I like to think about products from the usage side first, not just the technology.</p>
+        <p><strong>Why I do this:</strong> Because building itself is what drives me — from the first sketch to a running system in production.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= CONTACT ================= -->
+  <section id="contact" class="section wrap">
+    <div class="contact-inner">
+      <p class="eyebrow reveal">// contact</p>
+      <h2 class="reveal">Let's build something.</h2>
+      <p class="reveal">Got an idea, a project, or need help with an app, backend, or API? Just drop me a line.</p>
+      <div class="contact-actions reveal">
+        <a href="mailto:contact@jbre.dev" class="btn btn-primary">Send an email</a>
+        <a href="https://github.com/Unq0de" class="btn btn-ghost" target="_blank" rel="noopener">GitHub →</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap footer-inner">
+    <span>© <span id="year"></span> Unq0de</span>
+    <span>built with HTML, CSS &amp; a bit of coffee</span>
+  </div>
+</footer>
+
+<script>
+  document.getElementById('year').textContent = new Date().getFullYear();
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  // ---- Terminal typing sequence ----
+  var cmdEl = document.getElementById('typed-cmd');
+  var jsonEl = document.getElementById('typed-json');
+  var cursorEl = document.getElementById('cursor');
+  var thesisEl = document.getElementById('hero-thesis');
+
+  var command = 'whoami --as-json';
+  var jsonLines = [
+    '{',
+    '  <span class="key">"role"</span>: <span class="str">"Fullstack & App Developer"</span>,',
+    '  <span class="key">"stack"</span>: [<span class="arr">"React Native"</span>, <span class="arr">"Flutter"</span>, <span class="arr">"Python"</span>],',
+    '  <span class="key">"builds"</span>: <span class="str">"apps, apis, backends"</span>,',
+    '  <span class="key">"available"</span>: <span class="str">true</span>',
+    '}'
+  ];
+
+  function revealThesis(){
+    thesisEl.classList.add('revealed');
+  }
+
+  if (reduceMotion) {
+    cmdEl.textContent = command;
+    jsonEl.innerHTML = jsonLines.join('\n');
+    cursorEl.style.display = 'none';
+    revealThesis();
+  } else {
+    var i = 0;
+    function typeCmd(){
+      if (i <= command.length) {
+        cmdEl.textContent = command.slice(0, i);
+        i++;
+        setTimeout(typeCmd, 38);
+      } else {
+        setTimeout(typeJson, 250);
+      }
+    }
+    var lineIndex = 0;
+    function typeJson(){
+      if (lineIndex < jsonLines.length) {
+        jsonEl.innerHTML += (lineIndex > 0 ? '\n' : '') + jsonLines[lineIndex];
+        lineIndex++;
+        setTimeout(typeJson, 110);
+      } else {
+        setTimeout(revealThesis, 200);
+      }
+    }
+    setTimeout(typeCmd, 400);
+  }
+
+  // ---- Scroll reveal ----
+  var revealEls = document.querySelectorAll('.reveal');
+  if ('IntersectionObserver' in window && !reduceMotion) {
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(entry){
+        if (entry.isIntersecting) {
+          entry.target.classList.add('in-view');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.15 });
+    revealEls.forEach(function(el){ io.observe(el); });
+  } else {
+    revealEls.forEach(function(el){ el.classList.add('in-view'); });
+  }
+</script>
+
+</body>
+</html>
