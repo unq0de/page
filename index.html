@@ -57,7 +57,10 @@
     line-height: 1.65;
     -webkit-font-smoothing: antialiased;
     transition: background-color .2s ease, color .2s ease;
+    overflow-x: hidden;
   }
+
+  body.menu-open{ overflow: hidden; }
 
   body::before{
     content:"";
@@ -97,7 +100,7 @@
   header.nav{
     position: sticky;
     top: 0;
-    z-index: 20;
+    z-index: 30;
     background: rgba(13,15,18,0.82);
     backdrop-filter: blur(10px);
     border-bottom: 1px solid var(--border-soft);
@@ -155,6 +158,7 @@
     cursor: pointer;
     color: var(--text-muted);
     transition: color .15s ease, border-color .15s ease, background-color .2s ease;
+    flex-shrink: 0;
   }
   .theme-toggle:hover{ color: var(--text); border-color: var(--accent-blue); }
   .theme-toggle:active svg{ transform: scale(0.85) rotate(20deg); }
@@ -174,7 +178,76 @@
     transition: background-color .2s ease, transform .15s ease;
   }
   .nav-cta:hover{ transform: translateY(-1px); }
-  @media (max-width: 680px){ .nav-links-wrap{ display:none; } }
+
+  /* Hamburger button — hidden on desktop */
+  .menu-toggle{
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 36px; height: 36px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-raised);
+    cursor: pointer;
+    flex-shrink: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .menu-toggle .bar{
+    display: block;
+    width: 16px; height: 2px;
+    background: var(--text);
+    position: relative;
+    transition: background-color .2s ease, transform .2s ease;
+  }
+  .menu-toggle .bar::before, .menu-toggle .bar::after{
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 16px; height: 2px;
+    background: var(--text);
+    transition: transform .2s ease, top .2s ease, opacity .15s ease;
+  }
+  .menu-toggle .bar::before{ top: -5px; }
+  .menu-toggle .bar::after{ top: 5px; }
+  .menu-toggle.is-open .bar{ background: transparent; }
+  .menu-toggle.is-open .bar::before{ top: 0; transform: rotate(45deg); }
+  .menu-toggle.is-open .bar::after{ top: 0; transform: rotate(-45deg); }
+
+  /* Mobile dropdown panel */
+  .mobile-menu{
+    display: none;
+    position: fixed;
+    top: 65px;
+    left: 0; right: 0;
+    bottom: 0;
+    background: var(--bg);
+    z-index: 25;
+    padding: 8px 24px 32px;
+    overflow-y: auto;
+    opacity: 0;
+    transform: translateY(-8px);
+    pointer-events: none;
+    transition: opacity .2s ease, transform .2s ease;
+  }
+  .mobile-menu.is-open{ opacity: 1; transform: translateY(0); pointer-events: auto; }
+  .mobile-menu ul{ list-style:none; display:flex; flex-direction:column; }
+  .mobile-menu li{ border-bottom: 1px solid var(--border-soft); }
+  .mobile-menu a{
+    display:block;
+    font-family: var(--font-head);
+    font-size: 17px;
+    color: var(--text);
+    text-decoration: none;
+    padding: 18px 4px;
+  }
+  .mobile-menu a.active{ color: var(--accent); }
+
+  @media (max-width: 680px){
+    .nav-links-wrap{ display:none; }
+    .menu-toggle{ display: flex; }
+    .mobile-menu{ display: block; }
+  }
 
   .progress-track{ height: 2px; background: var(--border-soft); }
   .progress-fill{ height: 100%; width: 0%; background: var(--accent); transition: width .1s linear; }
@@ -188,10 +261,11 @@
     overflow: hidden;
     box-shadow: 0 30px 60px -30px rgba(0,0,0,0.6);
     max-width: 640px;
+    width: 100%;
     transition: background-color .2s ease, border-color .2s ease;
   }
   .window-bar{ display:flex; align-items:center; gap: 8px; padding: 11px 14px; background: var(--bg-raised); border-bottom: 1px solid var(--border); transition: background-color .2s ease, border-color .2s ease; }
-  .dot{ width: 10px; height: 10px; border-radius: 50%; opacity: 0.85; }
+  .dot{ width: 10px; height: 10px; border-radius: 50%; opacity: 0.85; flex-shrink:0; }
   .dot-r{ background: #FF5F57; } .dot-y{ background: #FEBC2E; } .dot-g{ background: #28C840; }
   .window-title{ margin-left: 8px; font-family: var(--font-head); font-size: 12.5px; color: var(--text-muted); }
   .window-body{ position: relative; padding: 20px 20px 22px; font-family: var(--font-head); font-size: 14px; min-height: 168px; overflow: hidden; }
@@ -201,12 +275,12 @@
     transition: opacity .3s ease;
   }
   .window-body:hover::before{ opacity:1; }
-  .terminal-line{ color: var(--text); position:relative; }
+  .terminal-line{ color: var(--text); position:relative; word-break: break-word; }
   .prompt{ color: var(--accent-blue); }
   #typed-cmd{ color: var(--text); }
   .cursor{ display: inline-block; color: var(--accent); animation: blink 1s steps(1) infinite; }
   @keyframes blink{ 50%{ opacity: 0; } }
-  .json-output{ margin: 12px 0 0 0; color: var(--text-muted); white-space: pre-wrap; font-size: 13.5px; line-height: 1.7; position:relative; }
+  .json-output{ margin: 12px 0 0 0; color: var(--text-muted); white-space: pre-wrap; word-break: break-word; font-size: 13.5px; line-height: 1.7; position:relative; }
   .json-output .key{ color: var(--accent-blue); }
   .json-output .str{ color: var(--accent); }
   .json-output .arr{ color: var(--accent-rose); }
@@ -219,10 +293,10 @@
   .hero-sub strong{ color: var(--text); font-weight: 600; }
 
   .status-pill{ display: inline-flex; align-items: center; gap: 8px; font-family: var(--font-head); font-size: 12.5px; color: var(--text-muted); margin-top: 18px; border: 1px solid var(--border); padding: 6px 12px; border-radius: 100px; transition: border-color .15s ease; }
-  .status-dot{ width: 7px; height: 7px; border-radius: 50%; background: #28C840; box-shadow: 0 0 0 3px rgba(40,200,64,0.15); }
+  .status-dot{ width: 7px; height: 7px; border-radius: 50%; background: #28C840; box-shadow: 0 0 0 3px rgba(40,200,64,0.15); flex-shrink:0; }
 
   .hero-cta{ display:flex; gap: 14px; margin-top: 28px; flex-wrap: wrap; }
-  .btn{ font-family: var(--font-body); font-weight: 600; font-size: 14.5px; padding: 12px 20px; border-radius: var(--radius); text-decoration: none; display: inline-block; transition: transform .15s ease, border-color .15s ease, background-color .2s ease, color .15s ease; }
+  .btn{ font-family: var(--font-body); font-weight: 600; font-size: 14.5px; padding: 12px 20px; border-radius: var(--radius); text-decoration: none; display: inline-block; transition: transform .15s ease, border-color .15s ease, background-color .2s ease, color .15s ease; text-align:center; }
   .btn-primary{ background: var(--accent); color: var(--accent-contrast); }
   .btn-primary:hover{ transform: translateY(-1px); }
   .btn-ghost{ border: 1px solid var(--border); color: var(--text); }
@@ -236,10 +310,10 @@
 
   /* ---------- STACK ---------- */
   .tree{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 18px; }
-  @media (max-width: 640px){ .tree{ grid-template-columns: 1fr; } }
   .tree-group{
     border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; background: var(--bg-alt);
     transition: background-color .2s ease, border-color .15s ease, transform .15s ease;
+    min-width: 0;
   }
   .tree-group:hover{ border-color: var(--accent-blue); transform: translateY(-2px); }
   .tree-group.span-2{ grid-column: 1 / -1; }
@@ -257,17 +331,17 @@
   .commit-card:hover{ border-color: var(--accent-blue); transform: translateY(-2px); }
   .commit-card.highlight{ animation: pulse 1.6s ease; }
   @keyframes pulse{ 0%,100%{ border-color: var(--border); } 35%{ border-color: var(--accent); } }
-  .commit-meta{ display:flex; align-items:center; gap: 10px; font-family: var(--font-head); font-size: 12.5px; color: var(--text-muted); margin-bottom: 10px; }
+  .commit-meta{ display:flex; align-items:center; gap: 10px; font-family: var(--font-head); font-size: 12.5px; color: var(--text-muted); margin-bottom: 10px; flex-wrap: wrap; }
   .commit-hash{ color: var(--accent-rose); }
   .commit-card h3{ font-family: var(--font-body); font-size: 18px; font-weight: 700; margin-bottom: 8px; }
   .commit-card p{ color: var(--text-muted); font-size: 15px; }
   .commit-more{ max-height: 0; overflow: hidden; opacity: 0; margin-top: 0; transition: max-height .35s ease, opacity .3s ease, margin-top .35s ease; }
   .commit-card.open .commit-more{ max-height: 220px; opacity: 1; margin-top: 12px; }
-  .expand-btn{ background:none; border:none; color: var(--accent-blue); font-family: var(--font-head); font-size: 12.5px; cursor:pointer; padding:0; margin-top: 12px; }
+  .expand-btn{ background:none; border:none; color: var(--accent-blue); font-family: var(--font-head); font-size: 12.5px; cursor:pointer; padding: 8px 0; margin-top: 6px; }
   .expand-btn:hover{ color: var(--accent); }
   .commit-tags{ display:flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
-  .commit-links{ display:flex; gap: 18px; margin-top: 16px; }
-  .commit-links a{ font-family: var(--font-head); font-size: 13.5px; text-decoration: none; color: var(--accent); }
+  .commit-links{ display:flex; gap: 18px; margin-top: 16px; flex-wrap: wrap; }
+  .commit-links a{ font-family: var(--font-head); font-size: 13.5px; text-decoration: none; color: var(--accent); padding: 4px 0; }
   .commit-links a:hover{ color: var(--accent-blue); }
 
   /* ---------- ABOUT / README ---------- */
@@ -294,11 +368,11 @@
     transition: background-color .2s ease, border-color .2s ease;
   }
   .contact-code .prompt{ color: var(--accent-blue); }
-  .contact-code .str{ color: var(--accent); }
+  .contact-code .str{ color: var(--accent); word-break: break-all; }
   .copy-btn{
     margin-left: auto; font-family: var(--font-head); font-size: 12px;
     border: 1px solid var(--border); background: var(--bg-raised); color: var(--text-muted);
-    padding: 4px 11px; border-radius: var(--radius); cursor: pointer;
+    padding: 6px 11px; border-radius: var(--radius); cursor: pointer;
     transition: border-color .15s ease, color .15s ease, background-color .2s ease;
   }
   .copy-btn:hover{ border-color: var(--accent-blue); color: var(--text); }
@@ -309,6 +383,35 @@
   footer{ border-top: 1px solid var(--border-soft); padding: 28px 0 40px; transition: border-color .2s ease; }
   .footer-inner{ display:flex; justify-content: space-between; align-items:center; flex-wrap: wrap; gap: 10px; font-family: var(--font-head); font-size: 12.5px; color: var(--text-muted); }
   .footer-status{ display:inline-block; transition: opacity .3s ease; }
+
+  /* ---------- RESPONSIVE (MOBILE) ---------- */
+  @media (max-width: 640px){
+    .wrap{ padding: 0 18px; }
+    .nav-inner{ padding: 14px 18px; gap: 14px; }
+    .hero{ padding: 44px 0 44px; }
+    .section{ padding: 56px 0; }
+    .section h2{ margin-bottom: 24px; }
+    .hero-thesis{ margin-top: 30px; }
+    .hero-sub{ font-size: 15.5px; }
+    .hero-cta{ margin-top: 24px; }
+    .hero-cta .btn{ flex: 1 1 auto; text-align:center; }
+    .tree{ grid-template-columns: 1fr; gap: 14px; }
+    .tree-group{ padding: 16px; }
+    .commit-card{ padding: 18px; }
+    .commit-card h3{ font-size: 16.5px; }
+    .readme-body{ padding: 20px 18px 22px; }
+    .contact-code{ font-size: 12.5px; padding: 12px 14px; }
+    .copy-btn{ margin-left: 0; width: 100%; text-align:center; }
+    .contact-actions .btn{ flex: 1 1 auto; text-align:center; }
+    .footer-inner{ flex-direction: column; align-items: flex-start; gap: 6px; }
+    body{ font-size: 15px; }
+  }
+
+  @media (max-width: 380px){
+    .window-body{ padding: 16px 14px 18px; font-size: 12.5px; }
+    .json-output{ font-size: 12px; }
+    .nav-cta{ padding: 7px 11px; font-size: 12.5px; }
+  }
 </style>
 </head>
 <body>
@@ -330,9 +433,20 @@
         <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
       </button>
       <a href="#contact" class="nav-cta">Contact</a>
+      <button class="menu-toggle" id="menu-toggle" type="button" aria-label="Toggle menu" aria-expanded="false" aria-controls="mobile-menu">
+        <span class="bar"></span>
+      </button>
     </div>
   </div>
   <div class="progress-track"><div class="progress-fill" id="progress-fill"></div></div>
+  <nav class="mobile-menu" id="mobile-menu">
+    <ul>
+      <li><a href="#stack" data-target="stack">Stack</a></li>
+      <li><a href="#projects" data-target="projects">Projects</a></li>
+      <li><a href="#about" data-target="about">About</a></li>
+      <li><a href="#contact" data-target="contact">Contact</a></li>
+    </ul>
+  </nav>
 </header>
 
 <main>
@@ -542,6 +656,32 @@
     try { localStorage.setItem('jbre-theme', next); } catch(e) {}
   });
 
+  /* ---------- MOBILE MENU ---------- */
+  var menuToggle = document.getElementById('menu-toggle');
+  var mobileMenu = document.getElementById('mobile-menu');
+  function closeMenu(){
+    menuToggle.classList.remove('is-open');
+    mobileMenu.classList.remove('is-open');
+    menuToggle.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('menu-open');
+  }
+  function openMenu(){
+    menuToggle.classList.add('is-open');
+    mobileMenu.classList.add('is-open');
+    menuToggle.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('menu-open');
+  }
+  menuToggle.addEventListener('click', function(){
+    var isOpen = mobileMenu.classList.contains('is-open');
+    if (isOpen) closeMenu(); else openMenu();
+  });
+  mobileMenu.querySelectorAll('a').forEach(function(a){
+    a.addEventListener('click', closeMenu);
+  });
+  window.addEventListener('resize', function(){
+    if (window.innerWidth > 680) closeMenu();
+  });
+
   /* ---------- TERMINAL TYPING ---------- */
   var cmdEl = document.getElementById('typed-cmd');
   var jsonEl = document.getElementById('typed-json');
@@ -604,6 +744,7 @@
 
   /* ---------- ACTIVE NAV + SLIDING UNDERLINE ---------- */
   var navLinks = Array.prototype.slice.call(document.querySelectorAll('.nav-links a'));
+  var mobileNavLinks = Array.prototype.slice.call(document.querySelectorAll('.mobile-menu a'));
   var underline = document.getElementById('nav-underline');
   var navWrap = document.querySelector('.nav-links-wrap');
   function moveUnderline(link){
@@ -622,6 +763,7 @@
           var id = entry.target.id;
           var match = navLinks.find(function(l){ return l.dataset.target === id; });
           navLinks.forEach(function(l){ l.classList.toggle('active', l === match); });
+          mobileNavLinks.forEach(function(l){ l.classList.toggle('active', l.dataset.target === id); });
           moveUnderline(match);
         }
       });
